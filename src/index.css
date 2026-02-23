@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  background: #000;
+}
+
+/* Wrapper general de sección */
+.section-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glow rojo base */
+.section-bg::before {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(
+    circle,
+    rgba(220, 38, 38, 0.25) 0%,
+    rgba(220, 38, 38, 0.12) 30%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  filter: blur(120px);
+  z-index: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Variaciones de posición */
+.section-left::before {
+  left: -250px;
+}
+
+.section-right::before {
+  right: -250px;
+}
+
+.section-center::before {
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
