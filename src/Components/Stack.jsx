@@ -1,3 +1,5 @@
+// components/Stack.jsx
+
 import { motion } from "framer-motion";
 
 function StackBlock({ title, items }) {
@@ -45,53 +47,85 @@ export default function Stack() {
         </motion.h2>
 
         <div className="grid md:grid-cols-2 gap-10">
+
           <StackBlock
             title="Frontend"
             items={[
-              "React",
-              "Angular",
-              "TailwindCSS",
+              "React 18",
+              "Next.js 14 (App Router)",
+              "Angular 20",
+              "TypeScript 5",
               "Vite",
-              "HTML5",
-              "CSS3",
-              "JavaScript (ES6+)",
+              "TailwindCSS",
+              "Framer Motion",
+              "Chart.js",
             ]}
           />
 
           <StackBlock
-            title="Backend"
+            title="Backend & APIs"
             items={[
-              "Node.js",
+              "Node.js (Express 5)",
+              "Next.js API Routes",
               ".NET",
-              "Express",
-              "APIs REST",
-              "JWT Authentication",
+              "Java (Maven)",
+              "RESTful APIs",
+              "JWT (httpOnly Cookies)",
               "Arquitectura en Capas",
+              "DAO Pattern",
               "Principios SOLID",
             ]}
           />
 
           <StackBlock
-            title="Bases de Datos"
+            title="Bases de Datos & Persistencia"
             items={[
-              "PostgreSQL",
-              "MySQL",
-              "MongoDB",
+              "PostgreSQL (Replication Primary/Replica)",
+              "MongoDB (Mongoose)",
+              "MySQL 8",
+              "JPA 2.2",
+              "Hibernate 5",
               "Supabase",
               "Modelado Relacional",
             ]}
           />
 
           <StackBlock
-            title="DevOps & Herramientas"
+            title="Infraestructura & DevOps"
             items={[
-              "Docker",
+              "Docker (Multi-stage)",
+              "Docker Compose",
+              "CI/CD (GitHub Actions)",
+              "Prometheus & Grafana",
+              "pg_dump Backups",
               "Linux",
               "Git & GitHub",
-              "Programación en C++",
-              "Optimización Algorítmica",
             ]}
           />
+
+          <StackBlock
+            title="Integraciones & Automatización"
+            items={[
+              "MercadoPago SDK",
+              "Baileys (WhatsApp Integration)",
+              "Puppeteer (Web Scraping)",
+              "OpenRouter (Mistral 7B)",
+              "SendGrid / Nodemailer / Resend",
+              "node-cron",
+              "Axios",
+            ]}
+          />
+
+          <StackBlock
+            title="Testing & Calidad"
+            items={[
+              "JUnit 5",
+              "Testing Angular (Jasmine/Karma)",
+              "Validaciones de negocio",
+              "Manejo de excepciones personalizadas",
+            ]}
+          />
+
         </div>
       </div>
     </section>
