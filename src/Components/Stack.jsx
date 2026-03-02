@@ -9,7 +9,7 @@ function StackBlock({ title, items }) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
-      className="border border-red-600/20 rounded-xl p-6 bg-black hover:border-red-600/40 transition-all duration-300"
+      className="border border-red-600/20 rounded-xl p-6 hover:border-red-600/40 transition-all duration-300"
     >
       <h3 className="text-sm uppercase tracking-widest text-gray-500 mb-4">
         {title}
@@ -33,7 +33,7 @@ export default function Stack() {
   return (
     <section
       id="stack"
-      className="py-28 px-8 md:px-20 bg-black text-white"
+      className="py-28 px-8 md:px-20 text-white"
     >
       <div className="max-w-6xl mx-auto">
         <motion.h2

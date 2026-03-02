@@ -2,6 +2,18 @@
 
 import { motion } from "framer-motion";
 
+const heroContainer = {
+  hidden: { opacity: 0, y: 60 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.2,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 const containerLeft = {
   hidden: {},
   show: {
@@ -25,16 +37,18 @@ export default function Hero() {
   const lastName = "Ríos";
 
   return (
-    <section className="min-h-screen flex flex-col justify-center px-8 md:px-24 bg-black text-white relative overflow-hidden">
-      
-      {/* Red ambient background */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-red-600/10 blur-[160px] -z-0" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-red-600/5 blur-[140px] -z-0" />
+    <section className=" pt-24 min-h-screen flex flex-col justify-center px-8 md:px-24 text-white relative overflow-hidden">
 
       <div className="relative z-10 max-w-6xl">
 
         {/* NAME */}
         <div className="mb-16">
+        <motion.div
+        variants={heroContainer}
+        initial="hidden"
+        animate="show"
+        className="mb-16"
+      >
           
           {/* First Name */}
           <motion.h1
@@ -64,6 +78,8 @@ export default function Hero() {
               </motion.span>
             ))}
           </motion.h1>
+
+        </motion.div>
         </div>
 
         {/* CONTENT GRID */}

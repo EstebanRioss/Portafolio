@@ -8,7 +8,7 @@ function ProjectCard({ title, description, tech,link }) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
-      className="bg-black border border-red-600/20 rounded-xl p-6 hover:border-red-600/50 hover:shadow-[0_10px_40px_rgba(220,38,38,0.15)] transition-all duration-300"
+      className=" border border-red-600/20 rounded-xl p-6 hover:border-red-600/50 hover:shadow-[0_10px_40px_rgba(220,38,38,0.15)] transition-all duration-300"
     >
       <h3 className="text-lg font-medium text-white mb-3 tracking-tight">
         {title}
@@ -38,7 +38,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="py-28 px-8 md:px-20 bg-black text-white"
+      className="py-28 px-8 md:px-20 text-white"
     >
       <div className="max-w-6xl mx-auto">
         <motion.h2
