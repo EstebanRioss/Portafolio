@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { Github } from "lucide-react";
+import { Github, ExternalLink } from "lucide-react";
 
-function ProjectCard({ title, description, tech,link }) {
+function ProjectCard({ title, description, tech, link, liveLink }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -23,12 +23,28 @@ function ProjectCard({ title, description, tech,link }) {
       </p>
 
       <div className="mt-6 flex items-center gap-6 text-sm">
-        <a
-          href={link}
-          className="text-gray-400 hover:text-white transition transform hover:scale-110"
-        >
-          <Github size={20} />
-        </a>
+        {link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-white transition transform hover:scale-110 flex items-center gap-2"
+          >
+            <Github size={20} />
+            <span className="text-xs font-medium tracking-wide">Código</span>
+          </a>
+        )}
+        {liveLink && (
+          <a
+            href={liveLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-red-400 hover:text-red-300 transition transform hover:scale-110 flex items-center gap-2"
+          >
+            <ExternalLink size={20} />
+            <span className="text-xs font-medium tracking-wide">Sitio Web</span>
+          </a>
+        )}
       </div>
     </motion.div>
   );

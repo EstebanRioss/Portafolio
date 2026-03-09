@@ -1,9 +1,18 @@
 // components/Contact.jsx
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, Copy, Check } from "lucide-react";
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+  const email = "esteban_690@hotmail.com";
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   return (
     <section
       id="contact"
@@ -58,13 +67,22 @@ export default function Contact() {
             <span className="text-sm tracking-wide">LinkedIn</span>
           </a>
 
-          <a
-            href="mailto:esteban_690@hotmail.com"
-            className="group flex items-center gap-3 text-gray-400 hover:text-red-500 transition-all duration-300"
-          >
-            <Mail className="w-5 h-5 group-hover:scale-110 transition" />
-            <span className="text-sm tracking-wide">Email</span>
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href={`mailto:${email}`}
+              className="group flex items-center gap-3 text-gray-400 hover:text-red-500 transition-all duration-300"
+            >
+              <Mail className="w-5 h-5 group-hover:scale-110 transition" />
+              <span className="text-sm tracking-wide">Email</span>
+            </a>
+            <button
+              onClick={handleCopy}
+              className="p-1.5 ml-1 text-gray-500 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              title="Copiar email"
+            >
+              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+            </button>
+          </div>
         </motion.div>
       </div>
     </section>

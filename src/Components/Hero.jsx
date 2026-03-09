@@ -1,6 +1,7 @@
 // components/Hero.jsx
 
 import { motion } from "framer-motion";
+import { Github, Linkedin, Download } from "lucide-react";
 
 const heroContainer = {
   hidden: { opacity: 0, y: 60 },
@@ -78,6 +79,37 @@ export default function Hero() {
               </motion.span>
             ))}
           </motion.h1>
+
+          {/* BUTTONS / CTAS */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5, duration: 0.8 }}
+            className="mt-10 flex flex-wrap items-center gap-5"
+          >
+            <a
+              href="#projects"
+              className="px-6 py-3 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
+            >
+              Ver Proyectos
+            </a>
+            <a
+              href="/CV_Esteban_Rios.pdf"
+              download
+              className="px-6 py-3 text-sm font-medium text-gray-300 border border-gray-600 rounded-full hover:text-white hover:border-red-500 hover:bg-white/5 transition-all flex items-center gap-2"
+            >
+              <Download size={16} /> CV
+            </a>
+            
+            <div className="flex items-center gap-4 ml-2 pl-6 border-l border-gray-700">
+              <a href="https://github.com/EstebanRioss" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
+                <Github size={20} />
+              </a>
+              <a href="https://www.linkedin.com/in/esteban-rios-b6056a309/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
+                <Linkedin size={20} />
+              </a>
+            </div>
+          </motion.div>
 
         </motion.div>
         </div>

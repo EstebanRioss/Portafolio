@@ -29,7 +29,7 @@ export default function About() {
             className="space-y-6"
           >
             <p className="text-sm text-gray-300 leading-relaxed">
-              Soy <span className="text-white font-medium">Analista Programador Universitario</span>
+              Soy <span className="text-white font-medium">Analista Programador Universitario </span>
               en formación y estudiante de Ingeniería en Informática.
               Me especializo en el desarrollo de aplicaciones web bajo
               arquitectura cliente-servidor con enfoque en diseño limpio,

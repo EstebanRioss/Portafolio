@@ -89,7 +89,17 @@ export default function Navbar() {
               <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-red-600 transition-all duration-300 group-hover:w-full" />
             </motion.a>
           ))}
-
+          
+          <motion.a
+            href="/CV_Esteban_Rios.pdf"
+            download
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.7 }}
+            className="px-5 py-2 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
+          >
+            Descargar CV
+          </motion.a>
         </div>
 
         {/* MOBILE BUTTON */}
@@ -122,6 +132,13 @@ export default function Navbar() {
                   {link.name}
                 </a>
               ))}
+              <a
+                href="/CV_Esteban_Rios.pdf"
+                download
+                className="px-6 py-2 block text-center text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)]"
+              >
+                Descargar CV
+              </a>
             </div>
           </motion.div>
         )}
