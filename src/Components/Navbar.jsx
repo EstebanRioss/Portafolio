@@ -91,7 +91,7 @@ export default function Navbar() {
           ))}
           
           <motion.a
-            href="/CV_Esteban_Rios.pdf"
+            href="/cv prog.pdf"
             download
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -133,7 +133,7 @@ export default function Navbar() {
                 </a>
               ))}
               <a
-                href="/CV_Esteban_Rios.pdf"
+                href="/cv prog.pdf"
                 download
                 className="px-6 py-2 block text-center text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)]"
               >

@@ -94,7 +94,7 @@ export default function Hero() {
               Ver Proyectos
             </a>
             <a
-              href="/CV_Esteban_Rios.pdf"
+              href="/cv prog.pdf"
               download
               className="px-6 py-3 text-sm font-medium text-gray-300 border border-gray-600 rounded-full hover:text-white hover:border-red-500 hover:bg-white/5 transition-all flex items-center gap-2"
             >
