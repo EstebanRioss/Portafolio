@@ -1,197 +1,255 @@
-// components/Hero.jsx
-
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Download } from "lucide-react";
+import { Github, Linkedin, ArrowRight, FileDown, Sparkles } from "lucide-react";
+import { PROFILE } from "../data/content";
 
-const heroContainer = {
-  hidden: { opacity: 0, y: 60 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1.2,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
+function useTypewriter(words, typeSpeed = 65, deleteSpeed = 35, holdDelay = 2000) {
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const word = words[index % words.length];
+    let timeout;
+
+    if (!deleting && text === word) {
+      timeout = setTimeout(() => setDeleting(true), holdDelay);
+    } else if (deleting && text === "") {
+      timeout = setTimeout(() => {
+        setDeleting(false);
+        setIndex((i) => (i + 1) % words.length);
+      }, 40);
+    } else {
+      timeout = setTimeout(
+        () => setText(word.slice(0, text.length + (deleting ? -1 : 1))),
+        deleting ? deleteSpeed : typeSpeed,
+      );
+    }
+    return () => clearTimeout(timeout);
+  }, [text, deleting, index, words, typeSpeed, deleteSpeed, holdDelay]);
+
+  return text;
+}
 
 const containerLeft = {
   hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.06,
-    },
-  },
+  show: { transition: { staggerChildren: 0.06 } },
 };
 
 const letterLeft = {
-  hidden: { opacity: 0, x: -60 },
-  show: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
+  hidden: { opacity: 0, x: -40 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
 
-export default function Hero() {
-  const firstName = "Esteban";
-  const lastName = "Ríos";
+function TerminalCard({ data }) {
+  const { prompt, content } = data;
+  const lines = [
+    { key: "nombre", value: `"${content.nombre}"` },
+    { key: "rol", value: `"${content.rol}"` },
+    { key: "stack", value: JSON.stringify(content.stack).replace(/"([^"]+)"/g, "'$1'") },
+    { key: "foco", value: `"${content.foco}"` },
+    { key: "disponible", value: String(content.disponible), prop: true },
+  ];
 
   return (
-    <section className=" pt-24 min-h-screen flex flex-col justify-center px-8 md:px-24 text-white relative overflow-hidden">
-
-      <div className="relative z-10 max-w-6xl">
-
-        {/* NAME */}
-        <div className="mb-16">
-        <motion.div
-        variants={heroContainer}
-        initial="hidden"
-        animate="show"
-        className="mb-16"
-      >
-          
-          {/* First Name */}
-          <motion.h1
-            variants={containerLeft}
-            initial="hidden"
-            animate="show"
-            className="flex flex-wrap text-5xl md:text-7xl font-semibold tracking-tight leading-tight"
-          >
-            {firstName.split("").map((char, index) => (
-              <motion.span key={`f-${index}`} variants={letterLeft}>
-                {char}
-              </motion.span>
-            ))}
-          </motion.h1>
-
-          {/* Last Name - delayed */}
-          <motion.h1
-            variants={containerLeft}
-            initial="hidden"
-            animate="show"
-            transition={{ delay: 0.6 }}
-            className="flex flex-wrap text-5xl md:text-7xl font-semibold tracking-tight leading-tight text-red-600 mt-3"
-          >
-            {lastName.split("").map((char, index) => (
-              <motion.span key={`l-${index}`} variants={letterLeft}>
-                {char}
-              </motion.span>
-            ))}
-          </motion.h1>
-
-          {/* BUTTONS / CTAS */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5, duration: 0.8 }}
-            className="mt-10 flex flex-wrap items-center gap-5"
-          >
-            <a
-              href="#projects"
-              className="px-6 py-3 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
+    <motion.div
+      initial={{ opacity: 0, y: 40, rotateX: 8 }}
+      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      transition={{ delay: 0.9, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className="relative hidden lg:block w-full max-w-md mx-auto"
+    >
+      <div className="absolute -inset-1 bg-gradient-to-tr from-red-600/40 to-red-900/10 rounded-2xl blur-xl opacity-60" />
+      <div className="relative rounded-2xl border border-white/10 bg-black/70 backdrop-blur-md overflow-hidden">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/[0.03]">
+          <span className="w-3 h-3 rounded-full bg-red-500/80" />
+          <span className="w-3 h-3 rounded-full bg-amber-400/80" />
+          <span className="w-3 h-3 rounded-full bg-green-500/80" />
+          <span className="ml-3 text-[11px] font-mono text-gray-400">
+            {prompt}: ~
+          </span>
+        </div>
+        <div className="p-5 font-mono text-[13px] leading-7">
+          <p className="text-gray-400">
+            <span className="text-red-400">$</span> {prompt} --dev
+          </p>
+          <p className="text-gray-400">{"{"}</p>
+          {lines.map((line, i) => (
+            <motion.p
+              key={line.key}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.3 + i * 0.12 }}
+              className="pl-4 text-gray-300"
             >
-              Ver Proyectos
-            </a>
-            <a
-              href="/cv prog.pdf"
-              download
-              className="px-6 py-3 text-sm font-medium text-gray-300 border border-gray-600 rounded-full hover:text-white hover:border-red-500 hover:bg-white/5 transition-all flex items-center gap-2"
-            >
-              <Download size={16} /> CV
-            </a>
-            
-            <div className="flex items-center gap-4 ml-2 pl-6 border-l border-gray-700">
-              <a href="https://github.com/EstebanRioss" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
-                <Github size={20} />
-              </a>
-              <a href="https://www.linkedin.com/in/esteban-rios-b6056a309/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
-                <Linkedin size={20} />
-              </a>
-            </div>
-          </motion.div>
+              <span className="text-red-400/90">{line.key}</span>
+              <span className="text-gray-500">: </span>
+              {line.prop ? (
+                <span className="text-green-400">{line.value}</span>
+              ) : (
+                <span className="text-gray-200">{line.value}</span>
+              )}
+              {i < lines.length - 1 ? "," : ""}
+            </motion.p>
+          ))}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.9, duration: 0.4 }}
+            className="text-gray-400"
+          >
+            {"}"}
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.2, duration: 0.5 }}
+            className="text-gray-500"
+          >
+            <span className="text-green-400">✓</span> Disponible para nuevos
+            proyectos
+          </motion.p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
-        </motion.div>
+export default function Hero() {
+  const typed = useTypewriter(PROFILE.roles);
+
+  return (
+    <section
+      id="top"
+      className="relative pt-32 lg:pt-40 min-h-screen flex flex-col justify-center px-6 md:px-8 text-white overflow-hidden"
+    >
+      <div className="relative z-10 max-w-6xl mx-auto w-full">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-12 items-center">
+          {/* LEFT */}
+          <div>
+            {/* Availability badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full border border-red-600/30 bg-red-600/10 text-[13px] text-red-300"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+              </span>
+              Disponible para proyectos
+            </motion.div>
+
+            {/* Name */}
+            <motion.h1
+              variants={containerLeft}
+              initial="hidden"
+              animate="show"
+              className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]"
+            >
+              {PROFILE.firstName.split("").map((char, index) => (
+                <motion.span key={`f-${index}`} variants={letterLeft} className="text-white">
+                  {char}
+                </motion.span>
+              ))}
+              <br />
+              {PROFILE.lastName.split("").map((char, index) => (
+                <motion.span key={`l-${index}`} variants={letterLeft} className="text-gradient">
+                  {char}
+                </motion.span>
+              ))}
+            </motion.h1>
+
+            {/* Role typewriter */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="mt-5 flex items-center gap-1 min-h-[28px]"
+            >
+              <Sparkles size={16} className="text-red-500 shrink-0" />
+              <p className="text-lg md:text-xl text-gray-300">
+                {typed}
+                <span className="caret ml-0.5 inline-block w-[2px] h-6 bg-red-500 align-middle" />
+              </p>
+            </motion.div>
+
+            {/* Summary */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.7 }}
+              className="mt-6 text-gray-400 leading-relaxed max-w-xl text-sm md:text-[15px]"
+            >
+              {PROFILE.heroSummary}
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.15, duration: 0.7 }}
+              className="mt-10 flex flex-wrap items-center gap-4"
+            >
+              <a
+                href="#projects"
+                className="group flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
+              >
+                Ver Proyectos
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </a>
+              <a
+                href={PROFILE.cvUrl}
+                download
+                className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-300 border border-gray-600 rounded-full hover:text-white hover:border-red-500 hover:bg-white/5 transition-all"
+              >
+                <FileDown size={16} />
+                Descargar CV
+              </a>
+              <div className="flex items-center gap-3">
+                <a
+                  href={PROFILE.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                  className="text-gray-400 hover:text-white transition-colors p-2.5 hover:bg-white/5 rounded-full"
+                >
+                  <Github size={18} />
+                </a>
+                <a
+                  href={PROFILE.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="text-gray-400 hover:text-white transition-colors p-2.5 hover:bg-white/5 rounded-full"
+                >
+                  <Linkedin size={18} />
+                </a>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* RIGHT — terminal */}
+          <TerminalCard data={PROFILE.terminal} />
         </div>
 
-        {/* CONTENT GRID */}
+        {/* STATS */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="grid md:grid-cols-3 gap-16 max-w-6xl"
+          transition={{ delay: 1.6, duration: 0.8 }}
+          className="mt-20 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/10 pt-10"
         >
-          
-          {/* PROFILE */}
-          <div className="space-y-8">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">
-                Perfil
+          {PROFILE.stats.map((stat) => (
+            <div key={stat.label} className="text-center md:text-left">
+              <p className="font-display text-3xl md:text-4xl font-semibold text-white">
+                {stat.value}
               </p>
-              <p className="text-sm text-gray-200 leading-relaxed">
-                Full Stack Developer con experiencia en desarrollo de aplicaciones
-                web escalables, arquitectura en capas y despliegue en entornos
-                productivos containerizados.
+              <p className="mt-1 text-xs uppercase tracking-widest text-gray-500">
+                {stat.label}
               </p>
             </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">
-                Especialización
-              </p>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                SaaS · Arquitectura DAO · Integraciones API · Automatización ·
-                Sistemas de reservas · Bots con IA · Alta disponibilidad
-              </p>
-            </div>
-          </div>
-
-          {/* FRONTEND + BACKEND */}
-          <div className="space-y-8">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">
-                Frontend
-              </p>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                React · Next.js 14 · Angular · TypeScript · Vite · TailwindCSS ·
-                Framer Motion · UI Modular
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">
-                Backend
-              </p>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Node.js · Express · Java · JPA · Hibernate · JWT · bcrypt ·
-                Arquitectura en Capas · Principios SOLID · APIs REST
-              </p>
-            </div>
-          </div>
-
-          {/* DATABASE + DEVOPS */}
-          <div className="space-y-8">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">
-                Bases de Datos
-              </p>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                PostgreSQL (Primary/Replica) · MySQL · Supabase ·
-                Modelado Relacional · Backups automáticos · Replicación
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">
-                DevOps & Infraestructura
-              </p>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Docker · Docker Compose · Prometheus · Grafana · CI/CD ·
-                GitHub Actions · Linux · Monitoreo · pgBadger
-              </p>
-            </div>
-          </div>
-
+          ))}
         </motion.div>
       </div>
     </section>

@@ -1,86 +1,101 @@
 import { motion } from "framer-motion";
+import { Layers, Code2, Database, Rocket, GraduationCap } from "lucide-react";
+import SectionHeading from "./SectionHeading";
+import { ABOUT_CARDS } from "../data/content";
+
+const ICONS = { Layers, Code2, Database, Rocket };
 
 export default function About() {
   return (
-    <section
-      id="about"
-      className="py-28 px-8 md:px-20 text-white"
-    >
-      <div className="max-w-5xl mx-auto">
-        {/* Title */}
-        <motion.h2
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-2xl md:text-3xl font-semibold mb-12 tracking-tight"
-        >
-          <span className="text-red-500">/</span> Sobre mí
-        </motion.h2>
+    <section id="about" className="py-24 md:py-32 px-6 md:px-8 text-white">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeading
+          kicker="01 · Quién soy"
+          title="Sobre mí"
+          description="Un perfil orientado a resolver problemas reales de producto, desde la base de datos hasta el pixel final."
+        />
 
-        {/* Content Grid */}
-        <div className="grid md:grid-cols-2 gap-16">
-          {/* Left Column */}
+        <div className="grid lg:grid-cols-2 gap-14 lg:gap-20">
+          {/* LEFT — narrative */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7 }}
             className="space-y-6"
           >
-            <p className="text-sm text-gray-300 leading-relaxed">
-              Soy <span className="text-white font-medium">Analista Programador Universitario </span>
-              en formación y estudiante de Ingeniería en Informática.
-              Me especializo en el desarrollo de aplicaciones web bajo
-              arquitectura cliente-servidor con enfoque en diseño limpio,
-              escalabilidad y buenas prácticas.
+            <p className="text-gray-300 leading-relaxed">
+              Soy{" "}
+              <span className="text-white font-medium">
+                Analista Programador Universitario
+              </span>{" "}
+              en formación y estudiante de{" "}
+              <span className="text-white font-medium">
+                Ingeniería en Sistemas
+              </span>
+              . Me especializo en desarrollar aplicaciones web de punta a punta
+              con arquitectura cliente-servidor, cuidando tanto la experiencia
+              del usuario como la salud técnica del backend.
             </p>
 
-            <p className="text-sm text-gray-400 leading-relaxed">
-              Trabajo con arquitecturas en capas, principios SOLID y diseño de
+            <p className="text-gray-400 leading-relaxed">
+              Construyo sistemas con arquitecturas en capas, principios SOLID y
               APIs REST seguras con autenticación JWT. Me enfoco en escribir
-              código mantenible, modular y preparado para producción.
+              código mantenible, modular y listo para producción: monitoreado,
+              containerizado y con su pipeline de CI/CD.
             </p>
-          </motion.div>
 
-          {/* Right Column */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <div>
-              <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
-                Enfoque Técnico
+            {/* Academic highlights */}
+            <div className="pt-2">
+              <p className="text-xs uppercase tracking-[0.3em] text-red-500/80 mb-4 flex items-center gap-2">
+                <GraduationCap size={14} />
+                Base académica
               </p>
-              <p className="text-sm text-gray-300">
-                Desarrollo Full Stack · Integración frontend-backend · Modelado
-                de bases de datos · Optimización de rendimiento
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
-                Experiencia Destacada
-              </p>
-              <p className="text-sm text-gray-300">
-                Bot de WhatsApp con IA · Plataforma fitness con Supabase ·
-                Sistema de gestión de eventos con Angular y Node.js
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
-                Base Académica
-              </p>
-              <p className="text-sm text-gray-300">
-                Programación competitiva en C++ con enfoque en algoritmos,
-                estructuras de datos y optimización computacional
-              </p>
+              <div className="flex flex-wrap gap-2.5">
+                {[
+                  "Tecnico en informatica",
+                  "Analista Programador Universitario",
+                  "Ingeniería en Sistemas",
+                  
+                ].map((item) => (
+                  <span
+                    key={item}
+                    className="text-xs px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-gray-300 hover:border-red-600/40 hover:text-white transition-colors"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
           </motion.div>
+
+          {/* RIGHT — what I do */}
+          <div className="grid sm:grid-cols-2 gap-4">
+            {ABOUT_CARDS.map((card, i) => {
+              const Icon = ICONS[card.icon];
+              return (
+                <motion.div
+                  key={card.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.6, delay: i * 0.08 }}
+                  whileHover={{ y: -4 }}
+                  className="group rounded-2xl border border-white/10 bg-white/[0.02] p-6 hover:border-red-600/40 hover:bg-white/[0.04] hover:shadow-[0_10px_40px_rgba(220,38,38,0.12)] transition-all duration-300"
+                >
+                  <div className="w-11 h-11 rounded-xl bg-red-600/10 border border-red-600/25 flex items-center justify-center mb-4 group-hover:bg-red-600/20 transition-colors">
+                    <Icon size={20} className="text-red-500" />
+                  </div>
+                  <h3 className="font-display text-base font-semibold text-white mb-2">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-gray-400 leading-relaxed">
+                    {card.description}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

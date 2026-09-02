@@ -1,28 +1,38 @@
-// components/Stack.jsx
-
 import { motion } from "framer-motion";
+import { Layout, Server, Database, Container, Zap, ShieldCheck, PlusCircle } from "lucide-react";
+import SectionHeading from "./SectionHeading";
+import { STACK_GROUPS, EXTRA_EXPERIENCE } from "../data/content";
 
-function StackBlock({ title, items }) {
+const ICONS = { Layout, Server, Database, Container, Zap, ShieldCheck };
+
+function StackGroup({ group, index }) {
+  const Icon = ICONS[group.icon];
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-      className="border border-red-600/20 rounded-xl p-6 hover:border-red-600/40 transition-all duration-300"
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: (index % 3) * 0.08 }}
+      whileHover={{ y: -4 }}
+      className="group rounded-2xl border border-white/10 bg-white/[0.02] p-7 hover:border-red-600/35 hover:bg-white/[0.04] hover:shadow-[0_15px_50px_rgba(220,38,38,0.1)] transition-all duration-300"
     >
-      <h3 className="text-sm uppercase tracking-widest text-gray-500 mb-4">
-        {title}
-      </h3>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="w-10 h-10 rounded-xl bg-red-600/10 border border-red-600/25 flex items-center justify-center group-hover:bg-red-600/20 transition-colors">
+          <Icon size={18} className="text-red-500" />
+        </div>
+        <h3 className="text-sm uppercase tracking-widest text-gray-300 font-semibold">
+          {group.title}
+        </h3>
+      </div>
 
-      <div className="space-y-2">
-        {items.map((item, index) => (
-          <p
-            key={index}
-            className="text-sm text-gray-300 hover:text-red-400 transition"
+      <div className="flex flex-wrap gap-2">
+        {group.items.map((item) => (
+          <span
+            key={item}
+            className="text-xs px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.02] text-gray-400 hover:text-white hover:border-red-600/40 transition-colors"
           >
             {item}
-          </p>
+          </span>
         ))}
       </div>
     </motion.div>
@@ -31,102 +41,39 @@ function StackBlock({ title, items }) {
 
 export default function Stack() {
   return (
-    <section
-      id="stack"
-      className="py-28 px-8 md:px-20 text-white"
-    >
+    <section id="stack" className="py-24 md:py-32 px-6 md:px-8 text-white">
       <div className="max-w-6xl mx-auto">
-        <motion.h2
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-2xl md:text-3xl font-semibold mb-16 tracking-tight"
-        >
-          <span className="text-red-500">/</span> Stack Técnico
-        </motion.h2>
+        <SectionHeading
+          kicker="03 · Herramientas"
+          title="Stack Técnico"
+          description="Tecnologías con las que construyo y despliego software todos los días."
+        />
 
-        <div className="grid md:grid-cols-2 gap-10">
-
-          <StackBlock
-            title="Frontend"
-            items={[
-              "React 18",
-              "Next.js 14 (App Router)",
-              "Angular 20",
-              "TypeScript 5",
-              "Vite",
-              "TailwindCSS",
-              "Framer Motion",
-              "Chart.js",
-            ]}
-          />
-
-          <StackBlock
-            title="Backend & APIs"
-            items={[
-              "Node.js (Express 5)",
-              "Next.js API Routes",
-              ".NET",
-              "Java (Maven)",
-              "RESTful APIs",
-              "JWT (httpOnly Cookies)",
-              "Arquitectura en Capas",
-              "DAO Pattern",
-              "Principios SOLID",
-            ]}
-          />
-
-          <StackBlock
-            title="Bases de Datos & Persistencia"
-            items={[
-              "PostgreSQL (Replication Primary/Replica)",
-              "MongoDB (Mongoose)",
-              "MySQL 8",
-              "JPA 2.2",
-              "Hibernate 5",
-              "Supabase",
-              "Modelado Relacional",
-            ]}
-          />
-
-          <StackBlock
-            title="Infraestructura & DevOps"
-            items={[
-              "Docker (Multi-stage)",
-              "Docker Compose",
-              "CI/CD (GitHub Actions)",
-              "Prometheus & Grafana",
-              "pg_dump Backups",
-              "Linux",
-              "Git & GitHub",
-            ]}
-          />
-
-          <StackBlock
-            title="Integraciones & Automatización"
-            items={[
-              "MercadoPago SDK",
-              "Baileys (WhatsApp Integration)",
-              "Puppeteer (Web Scraping)",
-              "OpenRouter (Mistral 7B)",
-              "SendGrid / Nodemailer / Resend",
-              "node-cron",
-              "Axios",
-            ]}
-          />
-
-          <StackBlock
-            title="Testing & Calidad"
-            items={[
-              "JUnit 5",
-              "Testing Angular (Jasmine/Karma)",
-              "Validaciones de negocio",
-              "Manejo de excepciones personalizadas",
-            ]}
-          />
-
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {STACK_GROUPS.map((group, index) => (
+            <StackGroup key={group.title} group={group} index={index} />
+          ))}
         </div>
+
+        {/* Extra */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="mt-10 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-red-600/25 bg-red-600/[0.03] p-6"
+        >
+          <PlusCircle size={18} className="text-red-500 shrink-0" />
+          <span className="text-sm text-gray-400 mr-1">También:</span>
+          {EXTRA_EXPERIENCE.map((item) => (
+            <span
+              key={item}
+              className="text-xs px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-gray-300"
+            >
+              {item}
+            </span>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

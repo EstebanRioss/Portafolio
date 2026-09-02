@@ -1,13 +1,12 @@
-// components/Navbar.jsx
-
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { useScroll, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
+import { Menu, X, FileDown } from "lucide-react";
+import { NAV_LINKS, PROFILE } from "../data/content";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("");
   const { scrollYProgress } = useScroll();
 
   const scaleX = useSpring(scrollYProgress, {
@@ -17,19 +16,22 @@ export default function Navbar() {
   });
 
   useEffect(() => {
+    const ids = NAV_LINKS.map((l) => l.href.slice(1));
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 24);
+
+      const pos = window.scrollY + window.innerHeight * 0.4;
+      let current = "";
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= pos) current = id;
+      }
+      setActive(current);
     };
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const navLinks = [
-    { name: "Sobre mí", href: "#about" },
-    { name: "Proyectos", href: "#projects" },
-    { name: "Stack", href: "#stack" },
-    { name: "Contacto", href: "#contact" },
-  ];
 
   return (
     <motion.nav
@@ -38,66 +40,58 @@ export default function Navbar() {
       transition={{ duration: 0.6 }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-black/90 backdrop-blur-xl border-b border-red-600/30"
+          ? "bg-black/80 backdrop-blur-xl border-b border-red-600/25"
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-8 py-4 flex justify-between items-center">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 py-4 flex justify-between items-center">
         {/* LOGO */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          whileHover={{ scale: 1.05 }}
-          className="text-xl font-semibold tracking-tight cursor-pointer select-none flex"
-        >
-          <motion.span
-            variants={{
-              hidden: { opacity: 0, x: -20 },
-              visible: { opacity: 1, x: 0 },
-            }}
-            transition={{ duration: 0.6 }}
-            className="text-white"
-          >
-            Esteban
-          </motion.span>
-
-          <motion.span
-            variants={{
-              hidden: { opacity: 0, x: 20 },
-              visible: { opacity: 1, x: 0 },
-            }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-red-600"
-          >
-            .dev
-          </motion.span>
-        </motion.div>
+        <a href="#top" className="flex items-center gap-2.5 group">
+          <img
+            src="/logo.png"
+            alt="Logo de Esteban Ríos"
+            className="h-9 w-auto object-contain rounded-md group-hover:opacity-90 transition-opacity"
+          />
+          <span className="font-display text-lg font-semibold tracking-tight select-none">
+            <span className="text-white">Esteban</span>
+            <span className="text-red-600">.dev</span>
+          </span>
+        </a>
 
         {/* DESKTOP MENU */}
-        <div className="hidden md:flex items-center gap-10">
-          {navLinks.map((link, index) => (
-            <motion.a
-              key={link.name}
-              href={link.href}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + index * 0.1 }}
-              whileHover={{ y: -2 }}
-              className="relative text-sm tracking-wide text-gray-400 hover:text-red-500 transition-colors duration-300 group"
-            >
-              {link.name}
-              <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-red-600 transition-all duration-300 group-hover:w-full" />
-            </motion.a>
-          ))}
-          
+        <div className="hidden md:flex items-center gap-8">
+          {NAV_LINKS.map((link, index) => {
+            const isActive = active === link.href.slice(1);
+            return (
+              <motion.a
+                key={link.name}
+                href={link.href}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + index * 0.1 }}
+                className={`relative text-sm tracking-wide transition-colors duration-300 group ${
+                  isActive ? "text-white" : "text-gray-400 hover:text-white"
+                }`}
+              >
+                {link.name}
+                <span
+                  className={`absolute left-0 -bottom-1 h-[2px] rounded-full bg-red-600 transition-all duration-300 ${
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </motion.a>
+            );
+          })}
+
           <motion.a
-            href="/cv prog.pdf"
+            href={PROFILE.cvUrl}
             download
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.7 }}
-            className="px-5 py-2 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
+            className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 hover:gap-2.5 transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
           >
+            <FileDown size={15} />
             Descargar CV
           </motion.a>
         </div>
@@ -105,6 +99,7 @@ export default function Navbar() {
         {/* MOBILE BUTTON */}
         <button
           onClick={() => setIsOpen(!isOpen)}
+          aria-label="Abrir menú"
           className="md:hidden text-red-500"
         >
           {isOpen ? <X size={26} /> : <Menu size={26} />}
@@ -118,34 +113,41 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-black border-t border-red-600/30"
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="md:hidden overflow-hidden bg-black/95 backdrop-blur-xl border-t border-red-600/25"
           >
-            <div className="flex flex-col items-center py-8 gap-8">
-              {navLinks.map((link) => (
-                <a
+            <div className="flex flex-col items-center py-8 gap-7">
+              {NAV_LINKS.map((link, i) => (
+                <motion.a
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="text-sm tracking-wide text-gray-300 hover:text-red-500 transition duration-300"
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.05 * i }}
+                  className="text-sm tracking-widest text-gray-300 hover:text-red-500 transition duration-300 uppercase"
                 >
                   {link.name}
-                </a>
+                </motion.a>
               ))}
               <a
-                href="/cv prog.pdf"
+                href={PROFILE.cvUrl}
                 download
-                className="px-6 py-2 block text-center text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)]"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)]"
               >
+                <FileDown size={15} />
                 Descargar CV
               </a>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* SCROLL PROGRESS */}
       <motion.div
         style={{ scaleX }}
-        className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 origin-left "
+        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-red-600 to-red-900 origin-left"
       />
     </motion.nav>
   );
