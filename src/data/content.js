@@ -161,7 +161,7 @@ export const PROJECTS = [
       "TypeScript",
       "Zod",
     ],
-    repo: "https://github.com/EstebanRioss/bot_busqueda",
+    repo: "https://github.com/EstebanRioss/appgastos",
   },
 ];
 
