@@ -15,7 +15,7 @@ export const PROFILE = {
   cvUrl: "/cv prog-2.pdf",
   location: "Argentina · Remoto 🔗",
   heroSummary:
-    "Construyo aplicaciones web escalables de punta a punta: interfaces modulares con React, APIs REST seguras en el backend y despliegues containerizados listos para producción.",
+    "Construyo aplicaciones web y móviles escalables de punta a punta: interfaces modulares con React y React Native, APIs REST seguras en el backend, integraciones con inteligencia artificial y despliegues containerizados listos para producción.",
   specialties: [
     "SaaS & Sistemas de Suscripciones",
     "Arquitectura en Capas y APIs REST",
@@ -33,8 +33,8 @@ export const PROFILE = {
     },
   },
   stats: [
-    { value: "6", label: "Proyectos fullstack" },
-    { value: "40+", label: "Tecnologías dominadas" },
+    { value: "7", label: "Proyectos fullstack" },
+    { value: "45+", label: "Tecnologías dominadas" },
     { value: "4", label: "Áreas de especialización" },
     { value: "2", label: "Idiomas · ES / EN" },
   ],
@@ -143,6 +143,26 @@ export const PROJECTS = [
     tech: ["Java", "JPA", "Hibernate", "MySQL", "DAO Pattern", "JUnit"],
     repo: "https://github.com/EstebanRioss/Trabajo_Final",
   },
+  {
+    title: "Gastify",
+    tagline: "Asistente financiero con IA",
+    category: "Móvil & IA",
+    description:
+      "App móvil para gestión de finanzas personales con inteligencia artificial. Registra gastos e ingresos automáticamente desde texto libre o fotos de recibos usando Google Gemini. OCR local con Tesseract.js como fallback sin conexión, dashboard con gráficos, metas de presupuesto y transacciones recurrentes. Incluye un servidor MCP para integración con agentes de IA.",
+    tech: [
+      "React Native",
+      "Expo SDK 54",
+      "Node.js",
+      "Express 5",
+      "MongoDB",
+      "Google Gemini",
+      "Tesseract.js",
+      "MCP Protocol",
+      "TypeScript",
+      "Zod",
+    ],
+    repo: "https://github.com/EstebanRioss/bot_busqueda",
+  },
 ];
 
 export const PROJECT_CATEGORIES = [
@@ -150,6 +170,7 @@ export const PROJECT_CATEGORIES = [
   { label: "SaaS", value: "SaaS" },
   { label: "IA & Bots", value: "IA & Bots" },
   { label: "Aplicaciones Web", value: "Aplicaciones Web" },
+  { label: "Móvil & IA", value: "Móvil & IA" },
 ];
 
 export const STACK_GROUPS = [
@@ -161,6 +182,8 @@ export const STACK_GROUPS = [
       "Next.js 14",
       "Angular 20",
       "TypeScript 5",
+      "React Native",
+      "Expo SDK 54",
       "Vite",
       "TailwindCSS",
       "Framer Motion",
@@ -216,6 +239,9 @@ export const STACK_GROUPS = [
       "Baileys (WhatsApp)",
       "Puppeteer (Scraping)",
       "OpenRouter (Mistral 7B)",
+      "Google Gemini (Texto + Visión)",
+      "Tesseract.js (OCR)",
+      "MCP Protocol",
       "Nodemailer / SendGrid / Resend",
       "node-cron",
       "Axios",
