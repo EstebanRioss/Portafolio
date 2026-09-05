@@ -9,10 +9,10 @@ export const PROFILE = {
     "Desarrollador Backend",
     "DevOps Entusiasta",
   ],
-  email: "esteban_690@hotmail.com",
+  email: "estebanrios247@gmail.com",
   github: "https://github.com/EstebanRioss",
   linkedin: "https://www.linkedin.com/in/esteban-rios-b6056a309/",
-  cvUrl: "/cv prog-2.pdf",
+  cvUrl: "/Resume.pdf",
   location: "Argentina · Remoto 🔗",
   heroSummary:
     "Construyo aplicaciones web y móviles escalables de punta a punta: interfaces modulares con React y React Native, APIs REST seguras en el backend, integraciones con inteligencia artificial y despliegues containerizados listos para producción.",

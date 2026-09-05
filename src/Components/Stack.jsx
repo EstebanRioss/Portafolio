@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Layout, Server, Database, Container, Zap, ShieldCheck, PlusCircle } from "lucide-react";
 import SectionHeading from "./SectionHeading";
@@ -7,14 +8,22 @@ const ICONS = { Layout, Server, Database, Container, Zap, ShieldCheck };
 
 function StackGroup({ group, index }) {
   const Icon = ICONS[group.icon];
+
+  const handleSpotlight = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: (index % 3) * 0.08 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, delay: (index % 3) * 0.08 }}
       whileHover={{ y: -4 }}
-      className="group rounded-2xl border border-white/10 bg-white/[0.02] p-7 hover:border-red-600/35 hover:bg-white/[0.04] hover:shadow-[0_15px_50px_rgba(220,38,38,0.1)] transition-all duration-300"
+      onMouseMove={handleSpotlight}
+      className="spotlight group rounded-2xl border border-white/10 bg-white/[0.02] p-7 overflow-hidden hover:border-red-600/35 transition-colors duration-300"
     >
       <div className="flex items-center gap-3 mb-5">
         <div className="w-10 h-10 rounded-xl bg-red-600/10 border border-red-600/25 flex items-center justify-center group-hover:bg-red-600/20 transition-colors">
@@ -40,6 +49,11 @@ function StackGroup({ group, index }) {
 }
 
 export default function Stack() {
+  const allTech = useMemo(
+    () => [...new Set(STACK_GROUPS.flatMap((group) => group.items))],
+    [],
+  );
+
   return (
     <section id="stack" className="py-24 md:py-32 px-6 md:px-8 text-white">
       <div className="max-w-6xl mx-auto">
@@ -48,6 +62,26 @@ export default function Stack() {
           title="Stack Técnico"
           description="Tecnologías con las que construyo y despliego software todos los días."
         />
+
+        {/* Marquee ticker */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="marquee mb-14"
+        >
+          <div className="marquee-track py-2">
+            {[...allTech, ...allTech].map((tech, i) => (
+              <span
+                key={`${tech}-${i}`}
+                className="mr-3 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-gray-300 text-xs whitespace-nowrap"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {STACK_GROUPS.map((group, index) => (
@@ -60,7 +94,7 @@ export default function Stack() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.15 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
           className="mt-10 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-red-600/25 bg-red-600/[0.03] p-6"
         >
           <PlusCircle size={18} className="text-red-500 shrink-0" />

@@ -20,9 +20,8 @@ body,
 body {
   margin: 0;
   background-color: #09090b;
-  background-image: radial-gradient(circle at 18% 22%, rgba(220, 38, 38, 0.12), transparent 42%),
-    radial-gradient(circle at 82% 78%, rgba(220, 38, 38, 0.08), transparent 45%);
-  background-attachment: fixed;
+  background-image: radial-gradient(circle at 18% 22%, rgba(220, 38, 38, 0.1), transparent 42%),
+    radial-gradient(circle at 82% 78%, rgba(220, 38, 38, 0.07), transparent 45%);
   color: #fafafa;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -48,20 +47,279 @@ body {
   background: #dc2626;
 }
 
-/* Subtle blueprint grid overlay */
+/* Subtle blueprint grid overlay (static, painted once) */
 .bg-grid {
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 72px 72px;
   -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 55%, transparent 100%);
   mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 55%, transparent 100%);
 }
+
+/* ---------- Text effects ---------- */
 
 .text-gradient {
   background: linear-gradient(100deg, #ffffff 20%, #f87171 60%, #dc2626 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* Animated gradient text — only background-position animates (tiny repaint) */
+.animated-gradient-text {
+  background: linear-gradient(90deg, #ffffff, #fca5a5, #dc2626, #fca5a5, #ffffff);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 7s linear infinite;
+}
+
+@keyframes gradient-shift {
+  to {
+    background-position: 220% center;
+  }
+}
+
+/* ---------- Letter stagger (transform + opacity only) ---------- */
+
+.letter-stagger > span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(28px);
+  animation: letter-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes letter-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Ambient background blobs (transform only, GPU) ---------- */
+
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform;
+  pointer-events: none;
+  animation-duration: 24s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
+
+.blob-1 {
+  width: 32rem;
+  height: 32rem;
+  top: -12%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.16), transparent 70%);
+  animation-name: blob-a;
+}
+
+.blob-2 {
+  width: 28rem;
+  height: 28rem;
+  bottom: -14%;
+  right: -8%;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.12), transparent 70%);
+  animation-name: blob-b;
+  animation-duration: 30s;
+}
+
+.blob-3 {
+  width: 24rem;
+  height: 24rem;
+  top: 42%;
+  left: 50%;
+  margin-left: -12rem;
+  background: radial-gradient(circle, rgba(153, 27, 27, 0.18), transparent 70%);
+  animation-name: blob-c;
+  animation-duration: 20s;
+}
+
+@keyframes blob-a {
+  to {
+    transform: translate3d(14%, 10%, 0) scale(1.08);
+  }
+}
+@keyframes blob-b {
+  to {
+    transform: translate3d(-12%, -8%, 0) scale(1.1);
+  }
+}
+@keyframes blob-c {
+  to {
+    transform: translate3d(10%, -6%, 0) scale(1.14);
+  }
+}
+
+/* ---------- Twinkling stars (transform + opacity only) ---------- */
+
+.stars i {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 9999px;
+  background: #f87171;
+  opacity: 0.2;
+  animation: twinkle 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+
+/* ---------- Cursor glow (desktop, fine pointers only) ---------- */
+
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.13), transparent 65%);
+  transform: translate3d(-9999px, -9999px, 0);
+  will-change: transform;
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* ---------- Card spotlight hover (desktop) ---------- */
+
+.spotlight {
+  position: relative;
+}
+
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(248, 113, 113, 0.12),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* ---------- Button / card sheen pass (transform only) ---------- */
+
+.sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.sheen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: translateX(-140%) skewX(-20deg);
+  animation: sheen-sweep 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sheen-sweep {
+  0% {
+    transform: translateX(-140%) skewX(-20deg);
+  }
+  55%,
+  100% {
+    transform: translateX(360%) skewX(-20deg);
+  }
+}
+
+/* ---------- Marquee (transform only) ---------- */
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 32s linear infinite;
+  will-change: transform;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- Misc entrance / float ---------- */
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+.float-y {
+  animation: float-y 2.4s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.25);
+  }
+  30% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-heart {
+  display: inline-block;
+  animation: heartbeat 2.2s ease-in-out infinite;
 }
 
 @keyframes caret-blink {
@@ -79,8 +337,25 @@ body {
   animation: caret-blink 1s step-end infinite;
 }
 
+/* ---------- Responsive + motion-safety ---------- */
+
+@media (max-width: 640px) {
+  .blob-1,
+  .blob-2,
+  .blob-3 {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -31,15 +31,7 @@ function useTypewriter(words, typeSpeed = 65, deleteSpeed = 35, holdDelay = 2000
   return text;
 }
 
-const containerLeft = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.06 } },
-};
-
-const letterLeft = {
-  hidden: { opacity: 0, x: -40 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
+const LETTERS = (word) => word.split("");
 
 function TerminalCard({ data }) {
   const { prompt, content } = data;
@@ -53,13 +45,13 @@ function TerminalCard({ data }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40, rotateX: 8 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.9, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       className="relative hidden lg:block w-full max-w-md mx-auto"
     >
-      <div className="absolute -inset-1 bg-gradient-to-tr from-red-600/40 to-red-900/10 rounded-2xl blur-xl opacity-60" />
-      <div className="relative rounded-2xl border border-white/10 bg-black/70 backdrop-blur-md overflow-hidden">
+      <div className="absolute -inset-1 bg-gradient-to-tr from-red-600/40 to-red-900/10 rounded-2xl blur-lg opacity-50" />
+      <div className="relative rounded-2xl border border-white/10 bg-black/70 backdrop-blur-sm overflow-hidden">
         <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/[0.03]">
           <span className="w-3 h-3 rounded-full bg-red-500/80" />
           <span className="w-3 h-3 rounded-full bg-amber-400/80" />
@@ -105,8 +97,7 @@ function TerminalCard({ data }) {
             transition={{ delay: 2.2, duration: 0.5 }}
             className="text-gray-500"
           >
-            <span className="text-green-400">✓</span> Disponible para nuevos
-            proyectos
+            <span className="text-green-400">✓</span> Disponible para nuevos proyectos
           </motion.p>
         </div>
       </div>
@@ -116,6 +107,14 @@ function TerminalCard({ data }) {
 
 export default function Hero() {
   const typed = useTypewriter(PROFILE.roles);
+  const firstNameLetters = LETTERS(PROFILE.firstName);
+  const lastNameLetters = LETTERS(PROFILE.lastName);
+
+  const handleSpotlight = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  };
 
   return (
     <section
@@ -124,8 +123,7 @@ export default function Hero() {
     >
       <div className="relative z-10 max-w-6xl mx-auto w-full">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-12 items-center">
-          {/* LEFT */}
-          <div>
+          <div onMouseMove={handleSpotlight} className="spotlight">
             {/* Availability badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -140,25 +138,27 @@ export default function Hero() {
               Disponible para proyectos
             </motion.div>
 
-            {/* Name */}
-            <motion.h1
-              variants={containerLeft}
-              initial="hidden"
-              animate="show"
-              className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]"
-            >
-              {PROFILE.firstName.split("").map((char, index) => (
-                <motion.span key={`f-${index}`} variants={letterLeft} className="text-white">
-                  {char}
-                </motion.span>
-              ))}
+            {/* Name — CSS staggered letters */}
+            <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]">
+              <span className="letter-stagger inline-block text-white">
+                {firstNameLetters.map((char, i) => (
+                  <span key={`f-${i}`} style={{ animationDelay: `${i * 45}ms` }}>
+                    {char}
+                  </span>
+                ))}
+              </span>
               <br />
-              {PROFILE.lastName.split("").map((char, index) => (
-                <motion.span key={`l-${index}`} variants={letterLeft} className="text-gradient">
-                  {char}
-                </motion.span>
-              ))}
-            </motion.h1>
+              <span className="letter-stagger animated-gradient-text inline-block">
+                {lastNameLetters.map((char, i) => (
+                  <span
+                    key={`l-${i}`}
+                    style={{ animationDelay: `${(firstNameLetters.length + i) * 45}ms` }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </span>
+            </h1>
 
             {/* Role typewriter */}
             <motion.div
@@ -193,7 +193,7 @@ export default function Hero() {
             >
               <a
                 href="#projects"
-                className="group flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
+                className="sheen group flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)]"
               >
                 Ver Proyectos
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -201,7 +201,7 @@ export default function Hero() {
               <a
                 href={PROFILE.cvUrl}
                 download
-                className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-300 border border-gray-600 rounded-full hover:text-white hover:border-red-500 hover:bg-white/5 transition-all"
+                className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-300 border border-gray-600 rounded-full hover:text-white hover:border-red-500 hover:bg-white/5 transition-colors"
               >
                 <FileDown size={16} />
                 Descargar CV
@@ -242,8 +242,8 @@ export default function Hero() {
         >
           {PROFILE.stats.map((stat) => (
             <div key={stat.label} className="text-center md:text-left">
-              <p className="font-display text-3xl md:text-4xl font-semibold text-white">
-                {stat.value}
+              <p className="font-display text-3xl md:text-4xl font-semibold">
+                <span className="animated-gradient-text">{stat.value}</span>
               </p>
               <p className="mt-1 text-xs uppercase tracking-widest text-gray-500">
                 {stat.label}
@@ -252,6 +252,17 @@ export default function Hero() {
           ))}
         </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <a
+        href="#about"
+        className="absolute bottom-9 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2 text-gray-500 hover:text-red-400 transition-colors"
+      >
+        <span className="text-[10px] uppercase tracking-[0.35em]">Scroll</span>
+        <span className="w-6 h-10 rounded-full border border-gray-600 flex justify-center pt-2">
+          <span className="float-y w-1 h-2 rounded-full bg-red-500" />
+        </span>
+      </a>
     </section>
   );
 }

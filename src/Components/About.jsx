@@ -5,6 +5,12 @@ import { ABOUT_CARDS } from "../data/content";
 
 const ICONS = { Layers, Code2, Database, Rocket };
 
+function handleSpotlight(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+  e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+}
+
 export default function About() {
   return (
     <section id="about" className="py-24 md:py-32 px-6 md:px-8 text-white">
@@ -81,7 +87,8 @@ export default function About() {
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.6, delay: i * 0.08 }}
                   whileHover={{ y: -4 }}
-                  className="group rounded-2xl border border-white/10 bg-white/[0.02] p-6 hover:border-red-600/40 hover:bg-white/[0.04] hover:shadow-[0_10px_40px_rgba(220,38,38,0.12)] transition-all duration-300"
+                  onMouseMove={handleSpotlight}
+                  className="spotlight group rounded-2xl border border-white/10 bg-white/[0.02] p-6 overflow-hidden hover:border-red-600/40 hover:bg-white/[0.04] transition-colors duration-300"
                 >
                   <div className="w-11 h-11 rounded-xl bg-red-600/10 border border-red-600/25 flex items-center justify-center mb-4 group-hover:bg-red-600/20 transition-colors">
                     <Icon size={20} className="text-red-500" />

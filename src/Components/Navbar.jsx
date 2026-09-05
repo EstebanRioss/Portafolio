@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, FileDown } from "lucide-react";
 import { NAV_LINKS, PROFILE } from "../data/content";
 
@@ -7,30 +7,44 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("");
-  const { scrollYProgress } = useScroll();
-
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
+  const progressRef = useRef(null);
 
   useEffect(() => {
     const ids = NAV_LINKS.map((l) => l.href.slice(1));
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 24);
+    let ticking = false;
 
-      const pos = window.scrollY + window.innerHeight * 0.4;
-      let current = "";
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= pos) current = id;
-      }
-      setActive(current);
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 24);
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+        if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress})`;
+        ticking = false;
+      });
     };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        }
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+    );
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -38,14 +52,13 @@ export default function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-black/80 backdrop-blur-xl border-b border-red-600/25"
+          ? "bg-black/75 backdrop-blur-md border-b border-red-600/20"
           : "bg-transparent"
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 md:px-8 py-4 flex justify-between items-center">
-        {/* LOGO */}
         <a href="#top" className="flex items-center gap-2.5 group">
           <img
             src="/logo.png"
@@ -58,7 +71,6 @@ export default function Navbar() {
           </span>
         </a>
 
-        {/* DESKTOP MENU */}
         <div className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link, index) => {
             const isActive = active === link.href.slice(1);
@@ -89,14 +101,13 @@ export default function Navbar() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.7 }}
-            className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 hover:gap-2.5 transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
+            className="sheen flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.35)]"
           >
             <FileDown size={15} />
             Descargar CV
           </motion.a>
         </div>
 
-        {/* MOBILE BUTTON */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Abrir menú"
@@ -106,7 +117,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* MOBILE MENU */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -114,7 +124,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden overflow-hidden bg-black/95 backdrop-blur-xl border-t border-red-600/25"
+            className="md:hidden overflow-hidden bg-black/90 backdrop-blur-md border-t border-red-600/20"
           >
             <div className="flex flex-col items-center py-8 gap-7">
               {NAV_LINKS.map((link, i) => (
@@ -134,7 +144,7 @@ export default function Navbar() {
                 href={PROFILE.cvUrl}
                 download
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)]"
+                className="flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.35)]"
               >
                 <FileDown size={15} />
                 Descargar CV
@@ -144,10 +154,10 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* SCROLL PROGRESS */}
-      <motion.div
-        style={{ scaleX }}
-        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-red-600 to-red-900 origin-left"
+      <div
+        ref={progressRef}
+        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-red-600 to-red-900 origin-left will-change-transform"
+        style={{ transform: "scaleX(0)" }}
       />
     </motion.nav>
   );

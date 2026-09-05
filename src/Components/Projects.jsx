@@ -1,20 +1,25 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Github } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import { PROJECTS, PROJECT_CATEGORIES } from "../data/content";
 
 function ProjectCard({ project, index }) {
+  const handleSpotlight = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  };
+
   return (
     <motion.article
-      layout
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.97 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -6 }}
-      className="group relative flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-7 overflow-hidden hover:border-red-600/40 hover:shadow-[0_20px_60px_rgba(220,38,38,0.12)] transition-all duration-300"
+      onMouseMove={handleSpotlight}
+      className="spotlight group relative flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-7 overflow-hidden hover:border-red-600/40 hover:shadow-[0_20px_60px_rgba(220,38,38,0.12)] transition-shadow duration-300"
     >
       {/* corner number */}
       <span className="absolute top-5 right-7 font-display text-5xl font-bold text-white/[0.04] group-hover:text-red-600/10 transition-colors duration-300 select-none">
@@ -91,7 +96,7 @@ export default function Projects() {
             <button
               key={cat.value}
               onClick={() => setFilter(cat.value)}
-              className={`px-4 py-1.5 text-sm rounded-full border transition-all duration-300 ${
+              className={`px-4 py-1.5 text-sm rounded-full border transition-colors duration-300 ${
                 filter === cat.value
                   ? "border-red-600/60 bg-red-600/15 text-red-300 shadow-[0_0_12px_rgba(220,38,38,0.25)]"
                   : "border-white/10 text-gray-400 hover:text-white hover:border-white/25"
@@ -102,14 +107,12 @@ export default function Projects() {
           ))}
         </motion.div>
 
-        {/* Grid */}
-        <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence mode="popLayout">
-            {filtered.map((project, index) => (
-              <ProjectCard key={project.title} project={project} index={index} />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        {/* Grid — key forces re-mount on filter change so cards animate in */}
+        <div key={filter} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((project, index) => (
+            <ProjectCard key={project.title} project={project} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   );

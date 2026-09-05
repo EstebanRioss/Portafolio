@@ -6,6 +6,12 @@ import { PROFILE, SOCIALS } from "../data/content";
 
 const SOCIAL_ICONS = { Github, Linkedin, Mail };
 
+function handleSpotlight(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+  e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+}
+
 export default function Contact() {
   const [copied, setCopied] = useState(false);
 
@@ -29,7 +35,8 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-8 md:p-12"
+          onMouseMove={handleSpotlight}
+          className="spotlight rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-8 md:p-12 overflow-hidden"
         >
           <h3 className="font-display text-2xl md:text-3xl font-semibold tracking-tight mb-3">
             ¿Trabajamos <span className="text-gradient">juntos</span>?

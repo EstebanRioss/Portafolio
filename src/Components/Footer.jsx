@@ -15,7 +15,7 @@ export default function Footer() {
           </p>
           <p className="mt-2 text-xs text-gray-500 flex items-center justify-center md:justify-start gap-1.5">
             Construido con React, TailwindCSS y mucha pasta de mi cuenta
-            <Heart size={12} className="text-red-500" />
+            <Heart size={12} className="animate-heart text-red-500" />
           </p>
         </div>
 
@@ -48,7 +48,7 @@ export default function Footer() {
           <a
             href="#top"
             aria-label="Volver arriba"
-            className="ml-2 flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 border border-white/10 rounded-full hover:text-white hover:border-red-600/50 hover:bg-white/5 transition-all"
+            className="ml-2 sheen flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 border border-white/10 rounded-full hover:text-white hover:border-red-600/50 hover:bg-white/5 transition-colors"
           >
             <ArrowUp size={15} />
           </a>
