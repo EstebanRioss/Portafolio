@@ -12,7 +12,7 @@ export const PROFILE = {
   email: "estebanrios247@gmail.com",
   github: "https://github.com/EstebanRioss",
   linkedin: "https://www.linkedin.com/in/esteban-rios-b6056a309/",
-  cvUrl: "/Resume.pdf",
+  cvUrl: "/Resume2.pdf",
   location: "Argentina · Remoto 🔗",
   heroSummary:
     "Construyo aplicaciones web y móviles escalables de punta a punta: interfaces modulares con React y React Native, APIs REST seguras en el backend, integraciones con inteligencia artificial y despliegues containerizados listos para producción.",
