@@ -33,7 +33,7 @@ export const PROFILE = {
     },
   },
   stats: [
-    { value: "7", label: "Proyectos fullstack" },
+    { value: "8", label: "Proyectos fullstack" },
     { value: "45+", label: "Tecnologías dominadas" },
     { value: "4", label: "Áreas de especialización" },
     { value: "2", label: "Idiomas · ES / EN" },
@@ -162,6 +162,25 @@ export const PROJECTS = [
       "Zod",
     ],
     repo: "https://github.com/EstebanRioss/appgastos",
+  },
+  {
+    title: "Bot de Asistencia para Agencia",
+    tagline: "Agente de IA con function calling",
+    category: "IA & Bots",
+    description:
+      "Agente de IA que atiende consultas de clientes 24/7 ejecutando acciones reales: reservas de turnos, pagos, reclamos y recordatorios, con derivación a humano mediante resumen generado por IA. Orquestador propio con clasificación de intenciones, extracción de entidades, análisis de sentimiento, RAG sobre base de conocimiento y 15 herramientas registradas (function calling). Verificación de identidad para operaciones sensibles, panel de agencia con métricas, auditoría JWT y scheduler de recordatorios.",
+    tech: [
+      "Python",
+      "FastAPI",
+      "SQLite",
+      "OpenAI/Anthropic",
+      "Function Calling",
+      "RAG",
+      "WebSocket",
+      "JWT",
+      "Scheduler",
+    ],
+    repo: "https://github.com/EstebanRioss/AgenteIA-base-",
   },
 ];
 

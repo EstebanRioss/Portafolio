@@ -110,12 +110,6 @@ export default function Hero() {
   const firstNameLetters = LETTERS(PROFILE.firstName);
   const lastNameLetters = LETTERS(PROFILE.lastName);
 
-  const handleSpotlight = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
-  };
-
   return (
     <section
       id="top"
@@ -123,7 +117,7 @@ export default function Hero() {
     >
       <div className="relative z-10 max-w-6xl mx-auto w-full">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-12 items-center">
-          <div onMouseMove={handleSpotlight} className="spotlight">
+          <div className="relative">
             {/* Availability badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
