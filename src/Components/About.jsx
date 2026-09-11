@@ -1,7 +1,9 @@
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Layers, Code2, Database, Rocket, GraduationCap } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import { ABOUT_CARDS } from "../data/content";
+import { useRevealChildren, useTilt } from "../lib/useAnime";
 
 const ICONS = { Layers, Code2, Database, Rocket };
 
@@ -11,7 +13,33 @@ function handleSpotlight(e) {
   e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
 }
 
+function AboutCard({ card }) {
+  const tiltRef = useRef(null);
+  const Icon = ICONS[card.icon];
+
+  useTilt(tiltRef, { max: 8 });
+
+  return (
+    <div
+      ref={tiltRef}
+      onMouseMove={handleSpotlight}
+      className="spotlight tilt-3d group rounded-2xl border border-white/10 bg-white/[0.02] p-6 overflow-hidden hover:border-red-600/40 hover:bg-white/[0.04] transition-colors duration-300"
+    >
+      <div className="tilt-raise w-11 h-11 rounded-xl bg-red-600/10 border border-red-600/25 flex items-center justify-center mb-4 group-hover:bg-red-600/20 transition-colors">
+        <Icon size={20} className="text-red-500" />
+      </div>
+      <h3 className="font-display text-base font-semibold text-white mb-2">
+        {card.title}
+      </h3>
+      <p className="text-sm text-gray-400 leading-relaxed">{card.description}</p>
+    </div>
+  );
+}
+
 export default function About() {
+  const gridRef = useRef(null);
+  useRevealChildren(gridRef, { staggerDelay: 90, distance: 46 });
+
   return (
     <section id="about" className="py-24 md:py-32 px-6 md:px-8 text-white">
       <div className="max-w-6xl mx-auto">
@@ -62,7 +90,6 @@ export default function About() {
                   "Tecnico en informatica",
                   "Analista Programador Universitario",
                   "Ingeniería en Sistemas",
-                  
                 ].map((item) => (
                   <span
                     key={item}
@@ -75,33 +102,11 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* RIGHT — what I do */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            {ABOUT_CARDS.map((card, i) => {
-              const Icon = ICONS[card.icon];
-              return (
-                <motion.div
-                  key={card.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.6, delay: i * 0.08 }}
-                  whileHover={{ y: -4 }}
-                  onMouseMove={handleSpotlight}
-                  className="spotlight group rounded-2xl border border-white/10 bg-white/[0.02] p-6 overflow-hidden hover:border-red-600/40 hover:bg-white/[0.04] transition-colors duration-300"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-red-600/10 border border-red-600/25 flex items-center justify-center mb-4 group-hover:bg-red-600/20 transition-colors">
-                    <Icon size={20} className="text-red-500" />
-                  </div>
-                  <h3 className="font-display text-base font-semibold text-white mb-2">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm text-gray-400 leading-relaxed">
-                    {card.description}
-                  </p>
-                </motion.div>
-              );
-            })}
+          {/* RIGHT — what I do, anime.js stagger + tilt */}
+          <div ref={gridRef} className="reveal-group grid sm:grid-cols-2 gap-4">
+            {ABOUT_CARDS.map((card) => (
+              <AboutCard key={card.title} card={card} />
+            ))}
           </div>
         </div>
       </div>

@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, FileDown } from "lucide-react";
 import { NAV_LINKS, PROFILE } from "../data/content";
+import { useMagnetic } from "../lib/useAnime";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("");
   const progressRef = useRef(null);
+  const cvRef = useRef(null);
+
+  useMagnetic(cvRef, { strength: 0.3 });
 
   useEffect(() => {
     const ids = NAV_LINKS.map((l) => l.href.slice(1));
@@ -96,6 +100,7 @@ export default function Navbar() {
           })}
 
           <motion.a
+            ref={cvRef}
             href={PROFILE.cvUrl}
             download
             initial={{ opacity: 0, scale: 0.8 }}

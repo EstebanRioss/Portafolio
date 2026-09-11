@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Copy, Check, Github, Linkedin, Send } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import { PROFILE, SOCIALS } from "../data/content";
+import { useMagnetic } from "../lib/useAnime";
 
 const SOCIAL_ICONS = { Github, Linkedin, Mail };
 
@@ -14,6 +15,11 @@ function handleSpotlight(e) {
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
+  const copyRef = useRef(null);
+  const sendRef = useRef(null);
+
+  useMagnetic(copyRef, { strength: 0.35 });
+  useMagnetic(sendRef, { strength: 0.4 });
 
   const handleCopy = () => {
     navigator.clipboard.writeText(PROFILE.email);
@@ -64,6 +70,7 @@ export default function Contact() {
             </div>
             <div className="flex items-center gap-2">
               <button
+                ref={copyRef}
                 onClick={handleCopy}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 border border-white/10 rounded-full hover:text-white hover:border-white/25 transition-colors"
                 title="Copiar email"
@@ -81,6 +88,7 @@ export default function Contact() {
                 )}
               </button>
               <a
+                ref={sendRef}
                 href={`mailto:${PROFILE.email}?subject=Contacto desde tu portfolio`}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)]"
               >

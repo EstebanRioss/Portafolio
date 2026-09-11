@@ -1,12 +1,14 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { Layout, Server, Database, Container, Zap, ShieldCheck, PlusCircle } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import { STACK_GROUPS, EXTRA_EXPERIENCE } from "../data/content";
+import { useRevealChildren, useTilt } from "../lib/useAnime";
 
 const ICONS = { Layout, Server, Database, Container, Zap, ShieldCheck };
 
-function StackGroup({ group, index }) {
+function StackGroup({ group }) {
+  const tiltRef = useRef(null);
   const Icon = ICONS[group.icon];
 
   const handleSpotlight = (e) => {
@@ -15,18 +17,16 @@ function StackGroup({ group, index }) {
     e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
   };
 
+  useTilt(tiltRef, { max: 7 });
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: (index % 3) * 0.08 }}
-      whileHover={{ y: -4 }}
+    <div
+      ref={tiltRef}
       onMouseMove={handleSpotlight}
-      className="spotlight group rounded-2xl border border-white/10 bg-white/[0.02] p-7 overflow-hidden hover:border-red-600/35 transition-colors duration-300"
+      className="spotlight tilt-3d group rounded-2xl border border-white/10 bg-white/[0.02] p-7 overflow-hidden hover:border-red-600/35 transition-colors duration-300"
     >
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-10 h-10 rounded-xl bg-red-600/10 border border-red-600/25 flex items-center justify-center group-hover:bg-red-600/20 transition-colors">
+        <div className="tilt-raise w-10 h-10 rounded-xl bg-red-600/10 border border-red-600/25 flex items-center justify-center group-hover:bg-red-600/20 transition-colors">
           <Icon size={18} className="text-red-500" />
         </div>
         <h3 className="text-sm uppercase tracking-widest text-gray-300 font-semibold">
@@ -35,24 +35,28 @@ function StackGroup({ group, index }) {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {group.items.map((item) => (
+        {group.items.map((item, i) => (
           <span
             key={item}
             className="text-xs px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.02] text-gray-400 hover:text-white hover:border-red-600/40 transition-colors"
+            style={{ transitionDelay: `${(i % 6) * 20}ms` }}
           >
             {item}
           </span>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 export default function Stack() {
+  const gridRef = useRef(null);
   const allTech = useMemo(
     () => [...new Set(STACK_GROUPS.flatMap((group) => group.items))],
     [],
   );
+
+  useRevealChildren(gridRef, { staggerDelay: 90, distance: 46 });
 
   return (
     <section id="stack" className="py-24 md:py-32 px-6 md:px-8 text-white">
@@ -83,9 +87,9 @@ export default function Stack() {
           </div>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {STACK_GROUPS.map((group, index) => (
-            <StackGroup key={group.title} group={group} index={index} />
+        <div ref={gridRef} className="reveal-group grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {STACK_GROUPS.map((group) => (
+            <StackGroup key={group.title} group={group} />
           ))}
         </div>
 

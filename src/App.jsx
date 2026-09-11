@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 import Navbar from "./Components/Navbar";
@@ -8,38 +8,18 @@ import Projects from "./Components/Projects";
 import Stack from "./Components/Stack";
 import Contact from "./Components/Contact";
 import Footer from "./Components/Footer";
-
-const STAR_POSITIONS = [
-  { top: "12%", left: "18%" },
-  { top: "22%", left: "68%" },
-  { top: "30%", left: "38%" },
-  { top: "16%", left: "88%" },
-  { top: "42%", left: "12%" },
-  { top: "58%", left: "82%" },
-  { top: "66%", left: "28%" },
-  { top: "74%", left: "58%" },
-  { top: "82%", left: "14%" },
-  { top: "90%", left: "72%" },
-  { top: "36%", left: "58%" },
-  { top: "62%", left: "44%" },
-];
+import IntroLoader from "./Components/IntroLoader";
+import ConstellationBackground from "./lib/ConstellationBackground";
+import { prefersReducedMotion } from "./lib/useAnime";
 
 function Background() {
-  const stars = useMemo(
-    () =>
-      STAR_POSITIONS.map((pos, i) => (
-        <i key={i} style={{ top: pos.top, left: pos.left, animationDelay: `${(i * 0.7) % 5}s` }} />
-      )),
-    [],
-  );
-
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
       <div className="absolute inset-0 bg-grid" />
+      <ConstellationBackground />
       <div className="blob blob-1" />
       <div className="blob blob-2" />
       <div className="blob blob-3" />
-      <div className="stars">{stars}</div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black" />
     </div>
   );
@@ -115,8 +95,14 @@ function BackToTop() {
 }
 
 function App() {
+  const [introDone, setIntroDone] = useState(false);
+  const [reduceMotion] = useState(() => prefersReducedMotion());
+
   return (
     <MotionConfig reducedMotion="user">
+      {!introDone && !reduceMotion && (
+        <IntroLoader onDone={() => setIntroDone(true)} />
+      )}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

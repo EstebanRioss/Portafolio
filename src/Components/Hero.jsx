@@ -1,7 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Github, Linkedin, ArrowRight, FileDown, Sparkles } from "lucide-react";
 import { PROFILE } from "../data/content";
+import {
+  useLetterEntrance,
+  useCharWave,
+  useParallax,
+  useCounter,
+} from "../lib/useAnime";
 
 function useTypewriter(words, typeSpeed = 65, deleteSpeed = 35, holdDelay = 2000) {
   const [index, setIndex] = useState(0);
@@ -105,10 +111,45 @@ function TerminalCard({ data }) {
   );
 }
 
+function Stat({ stat, delay }) {
+  const valueRef = useRef(null);
+  const numeric = parseInt(stat.value.replace(/\D/g, ""), 10) || 0;
+  const suffix =
+    stat.value.replace(/\D/g, "").length === stat.value.length ? "" : stat.value.replace(/[\d,]/g, "");
+
+  useCounter(valueRef, { value: numeric, suffix, duration: 1800 + delay });
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.6 + delay * 0.15, duration: 0.7 }}
+      className="text-center md:text-left"
+    >
+      <p className="font-display text-3xl md:text-4xl font-semibold">
+        <span ref={valueRef} className="animated-gradient-text">
+          {stat.value}
+        </span>
+      </p>
+      <p className="mt-1 text-xs uppercase tracking-widest text-gray-500">
+        {stat.label}
+      </p>
+    </motion.div>
+  );
+}
+
 export default function Hero() {
   const typed = useTypewriter(PROFILE.roles);
+  const nameRef = useRef(null);
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
   const firstNameLetters = LETTERS(PROFILE.firstName);
   const lastNameLetters = LETTERS(PROFILE.lastName);
+
+  useLetterEntrance(nameRef, { start: 300, staggerDelay: 32, distance: 64 });
+  useCharWave(nameRef);
+  useParallax(leftRef, { factor: 12 });
+  useParallax(rightRef, { factor: -10 });
 
   return (
     <section
@@ -117,7 +158,7 @@ export default function Hero() {
     >
       <div className="relative z-10 max-w-6xl mx-auto w-full">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-12 items-center">
-          <div className="relative">
+          <div ref={leftRef} className="relative">
             {/* Availability badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -132,22 +173,20 @@ export default function Hero() {
               Disponible para proyectos
             </motion.div>
 
-            {/* Name — CSS staggered letters */}
-            <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]">
-              <span className="letter-stagger inline-block text-white">
-                {firstNameLetters.map((char, i) => (
-                  <span key={`f-${i}`} style={{ animationDelay: `${i * 45}ms` }}>
-                    {char}
-                  </span>
-                ))}
-              </span>
+            {/* Name — anime.js staggered letters + char-wave on hover */}
+            <h1
+              ref={nameRef}
+              className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] select-none"
+            >
+              {firstNameLetters.map((char, i) => (
+                <span key={`f-${i}`} className="hero-letter text-white">
+                  {char}
+                </span>
+              ))}
               <br />
-              <span className="letter-stagger animated-gradient-text inline-block">
+              <span className="inline-block animated-gradient-text">
                 {lastNameLetters.map((char, i) => (
-                  <span
-                    key={`l-${i}`}
-                    style={{ animationDelay: `${(firstNameLetters.length + i) * 45}ms` }}
-                  >
+                  <span key={`l-${i}`} className="hero-letter">
                     {char}
                   </span>
                 ))}
@@ -224,27 +263,17 @@ export default function Hero() {
           </div>
 
           {/* RIGHT — terminal */}
-          <TerminalCard data={PROFILE.terminal} />
+          <div ref={rightRef}>
+            <TerminalCard data={PROFILE.terminal} />
+          </div>
         </div>
 
-        {/* STATS */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6, duration: 0.8 }}
-          className="mt-20 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/10 pt-10"
-        >
-          {PROFILE.stats.map((stat) => (
-            <div key={stat.label} className="text-center md:text-left">
-              <p className="font-display text-3xl md:text-4xl font-semibold">
-                <span className="animated-gradient-text">{stat.value}</span>
-              </p>
-              <p className="mt-1 text-xs uppercase tracking-widest text-gray-500">
-                {stat.label}
-              </p>
-            </div>
+        {/* STATS — anime.js animated counters */}
+        <div className="mt-20 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/10 pt-10">
+          {PROFILE.stats.map((stat, i) => (
+            <Stat key={stat.label} stat={stat} delay={i * 0.12} />
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}

@@ -1,9 +1,17 @@
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import { ArrowUp, Github, Linkedin, Mail, Heart } from "lucide-react";
 import { PROFILE } from "../data/content";
+import { useMagnetic, useScrambleIn } from "../lib/useAnime";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const topRef = useRef(null);
+  const creditRef = useRef(null);
+  const credit = `© ${year} ${PROFILE.name} — Full Stack Developer`;
+
+  useMagnetic(topRef, { strength: 0.35 });
+  useScrambleIn(creditRef, { text: credit });
 
   return (
     <footer className="relative border-t border-white/10">
@@ -14,7 +22,7 @@ export default function Footer() {
             <span className="text-red-600">.dev</span>
           </p>
           <p className="mt-2 text-xs text-gray-500 flex items-center justify-center md:justify-start gap-1.5">
-            Construido con React, TailwindCSS y mucha pasta de mi cuenta
+            
             <Heart size={12} className="animate-heart text-red-500" />
           </p>
         </div>
@@ -46,6 +54,7 @@ export default function Footer() {
             <Mail size={17} />
           </a>
           <a
+            ref={topRef}
             href="#top"
             aria-label="Volver arriba"
             className="ml-2 sheen flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 border border-white/10 rounded-full hover:text-white hover:border-red-600/50 hover:bg-white/5 transition-colors"
@@ -57,12 +66,13 @@ export default function Footer() {
 
       <div className="border-t border-white/5 py-5 text-center">
         <motion.p
+          ref={creditRef}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="text-xs text-gray-600"
         >
-          © {year} {PROFILE.name} — Full Stack Developer
+          {credit}
         </motion.p>
       </div>
     </footer>

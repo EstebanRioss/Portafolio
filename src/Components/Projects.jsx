@@ -1,25 +1,26 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Github } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import { PROJECTS, PROJECT_CATEGORIES } from "../data/content";
+import { useRevealChildren, useTilt } from "../lib/useAnime";
 
 function ProjectCard({ project, index }) {
+  const tiltRef = useRef(null);
+
   const handleSpotlight = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
     e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
   };
 
+  useTilt(tiltRef, { max: 6 });
+
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -6 }}
+    <article
+      ref={tiltRef}
       onMouseMove={handleSpotlight}
-      className="spotlight group relative flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-7 overflow-hidden hover:border-red-600/40 hover:shadow-[0_20px_60px_rgba(220,38,38,0.12)] transition-shadow duration-300"
+      className="spotlight tilt-3d group relative flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-7 overflow-hidden hover:border-red-600/40 transition-shadow duration-300"
     >
       {/* corner number */}
       <span className="absolute top-5 right-7 font-display text-5xl font-bold text-white/[0.04] group-hover:text-red-600/10 transition-colors duration-300 select-none">
@@ -65,12 +66,15 @@ function ProjectCard({ project, index }) {
           </span>
         </a>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
 export default function Projects() {
   const [filter, setFilter] = useState("all");
+  const gridRef = useRef(null);
+
+  useRevealChildren(gridRef, { staggerDelay: 60, distance: 48 }, [filter]);
 
   const filtered =
     filter === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
@@ -107,8 +111,8 @@ export default function Projects() {
           ))}
         </motion.div>
 
-        {/* Grid — key forces re-mount on filter change so cards animate in */}
-        <div key={filter} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Grid — key forces remount on filter change so anime.js re-staggers */}
+        <div key={filter} ref={gridRef} className="reveal-group grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((project, index) => (
             <ProjectCard key={project.title} project={project} index={index} />
           ))}

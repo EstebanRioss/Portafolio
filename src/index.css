@@ -81,20 +81,61 @@ body {
   }
 }
 
-/* ---------- Letter stagger (transform + opacity only) ---------- */
+/* ---------- Reveal groups (children hidden until anime.js staggers them in) ---------- */
 
-.letter-stagger > span {
-  display: inline-block;
+.reveal-group > * {
   opacity: 0;
-  transform: translateY(28px);
-  animation: letter-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-@keyframes letter-in {
-  to {
-    opacity: 1;
-    transform: none;
-  }
+/* ---------- Letter hero entrance (anime.js drives the animation) ---------- */
+
+.hero-letter {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ---------- 3D tilt cards (anime.js animates --rx / --ry) ---------- */
+
+.tilt-3d {
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.18s ease-out, box-shadow 0.35s ease, border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.tilt-3d:hover {
+  box-shadow: 0 30px 70px -25px rgba(220, 38, 38, 0.4);
+}
+
+.tilt-3d .tilt-raise {
+  transform: translateZ(28px);
+  transition: transform 0.3s ease;
+}
+
+/* ---------- Page intro / preloader (anime.js timeline) ---------- */
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0d;
+  background-image: radial-gradient(
+      circle at 50% 120%,
+      rgba(220, 38, 38, 0.2),
+      transparent 60%
+    ),
+    radial-gradient(circle at 50% -20%, rgba(220, 38, 38, 0.12), transparent 55%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: auto, auto, 72px 72px, 72px 72px;
+  color: #fafafa;
+  font-family: var(--font-sans);
+  will-change: transform;
+  overflow: hidden;
 }
 
 /* ---------- Ambient background blobs (transform only, GPU) ---------- */
@@ -153,31 +194,6 @@ body {
 @keyframes blob-c {
   to {
     transform: translate3d(10%, -6%, 0) scale(1.14);
-  }
-}
-
-/* ---------- Twinkling stars (transform + opacity only) ---------- */
-
-.stars i {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  border-radius: 9999px;
-  background: #f87171;
-  opacity: 0.2;
-  animation: twinkle 5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.15;
-    transform: scale(0.6);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scale(1);
   }
 }
 

@@ -1,6 +1,50 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { animate, stagger } from "animejs";
+import { prefersReducedMotion } from "../lib/useAnime";
+
+function useSectionTitleReveal(ref) {
+  const ran = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const letters = Array.from(el.querySelectorAll(".section-title-letter"));
+    if (!letters.length) return;
+
+    if (prefersReducedMotion()) {
+      letters.forEach((l) => (l.style.opacity = 1));
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || ran.current) return;
+        ran.current = true;
+        animate(letters, {
+          opacity: [0, 1],
+          translateY: [24, 0],
+          rotate: [6, 0],
+          filter: ["blur(6px)", "blur(0px)"],
+          duration: 700,
+          delay: stagger(26, { start: 60 }),
+          ease: "outExpo",
+        });
+        io.disconnect();
+      },
+      { threshold: 0.4 },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref]);
+}
 
 export default function SectionHeading({ kicker, title, description }) {
+  const titleRef = useRef(null);
+  useSectionTitleReveal(titleRef);
+  const reduceMotion = prefersReducedMotion();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -16,8 +60,19 @@ export default function SectionHeading({ kicker, title, description }) {
         </p>
       </div>
 
-      <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-white">
-        {title}
+      <h2
+        ref={titleRef}
+        className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-white"
+      >
+        {title.split("").map((char, i) => (
+          <span
+            key={`${char}-${i}`}
+            className="section-title-letter inline-block"
+            style={{ opacity: reduceMotion ? 1 : 0 }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </span>
+        ))}
       </h2>
 
       {description && (
