@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { Layout, Server, Database, Container, Zap, ShieldCheck, PlusCircle } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import BuildIn from "./BuildIn";
 import { STACK_GROUPS, EXTRA_EXPERIENCE } from "../data/content";
 import { useRevealChildren, useTilt } from "../lib/useAnime";
 
@@ -60,7 +61,7 @@ export default function Stack() {
 
   return (
     <section id="stack" className="py-24 md:py-32 px-6 md:px-8 text-white">
-      <div className="max-w-6xl mx-auto">
+      <BuildIn className="max-w-6xl mx-auto">
         <SectionHeading
           kicker="03 · Herramientas"
           title="Stack Técnico"
@@ -112,7 +113,7 @@ export default function Stack() {
             </span>
           ))}
         </motion.div>
-      </div>
+      </BuildIn>
     </section>
   );
 }

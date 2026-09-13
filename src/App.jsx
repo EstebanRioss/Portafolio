@@ -8,9 +8,8 @@ import Projects from "./Components/Projects";
 import Stack from "./Components/Stack";
 import Contact from "./Components/Contact";
 import Footer from "./Components/Footer";
-import IntroLoader from "./Components/IntroLoader";
+import PageBuilder from "./Components/PageBuilder";
 import ConstellationBackground from "./lib/ConstellationBackground";
-import { prefersReducedMotion } from "./lib/useAnime";
 
 function Background() {
   return (
@@ -95,14 +94,8 @@ function BackToTop() {
 }
 
 function App() {
-  const [introDone, setIntroDone] = useState(false);
-  const [reduceMotion] = useState(() => prefersReducedMotion());
-
   return (
     <MotionConfig reducedMotion="user">
-      {!introDone && !reduceMotion && (
-        <IntroLoader onDone={() => setIntroDone(true)} />
-      )}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -124,6 +117,7 @@ function App() {
 
         <Footer />
         <BackToTop />
+        <PageBuilder />
       </motion.div>
     </MotionConfig>
   );

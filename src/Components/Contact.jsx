@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Copy, Check, Github, Linkedin, Send } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import BuildIn from "./BuildIn";
 import { PROFILE, SOCIALS } from "../data/content";
 import { useMagnetic } from "../lib/useAnime";
 
@@ -29,7 +30,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 md:py-32 px-6 md:px-8 text-white">
-      <div className="max-w-4xl mx-auto">
+      <BuildIn className="max-w-4xl mx-auto">
         <SectionHeading
           kicker="04 · Contacto"
           title="Hablemos"
@@ -123,7 +124,7 @@ export default function Contact() {
             })}
           </div>
         </motion.div>
-      </div>
+      </BuildIn>
     </section>
   );
 }

@@ -1,0 +1,9 @@
+Memoryals [plain] preview=MISSING                                           srcLine=2587
+Canchas [plain] preview=MISSING                                             srcLine=2598
+AI WhatsApp Assistant [plain] preview=MISSING                               srcLine=2609
+Event Manager [plain] preview=MISSING                                       srcLine=2619
+JFit [plain] preview=MISSING                                                srcLine=2629
+Gestión de Reservas [plain] preview=MISSING                                 srcLine=2639
+Gastify [plain] preview=MISSING                                             srcLine=2648
+Bot de Asistencia para Agencia [plain] preview=MISSING                      srcLine=2668
+TOTAL=8

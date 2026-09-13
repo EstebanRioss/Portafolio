@@ -97,6 +97,8 @@ export const PROJECTS = [
       "Plataforma de membresías con cuotas mensuales automatizadas. Autenticación JWT con roles (cliente/admin), aprobación de cuentas, recordatorios por email y panel administrativo con métricas en tiempo real.",
     tech: ["MEAN Stack", "MercadoPago", "JWT", "Cron Jobs", "Dashboard Analytics"],
     repo: "https://github.com/EstebanRioss/Memoryals-Frontend",
+    preview: { from: "#450a0a", to: "#7c2d12" },
+    featured: true,
   },
   {
     title: "Canchas",
@@ -106,6 +108,8 @@ export const PROJECTS = [
       "Reservas deportivas sobre una infraestructura de producción: PostgreSQL replicado (Primary/Replica), monitoreo con Prometheus y Grafana, backups automáticos y despliegue con Docker Compose + CI/CD.",
     tech: ["Next.js 14", "PostgreSQL Replication", "Docker", "Prometheus", "CI/CD"],
     repo: "https://github.com/EstebanRioss/HiaFinal",
+    preview: { from: "#111827", to: "#991b1b" },
+    featured: true,
   },
   {
     title: "AI WhatsApp Assistant",
@@ -115,6 +119,7 @@ export const PROJECTS = [
       "Bot conversacional de WhatsApp que genera respuestas con Mistral 7B (OpenRouter) enriquecidas con contenido scrapado en vivo. Sesiones persistentes con Baileys y arquitectura modular para mensajes en tiempo real.",
     tech: ["Node.js", "Baileys", "Puppeteer", "OpenRouter", "Mistral 7B"],
     repo: "https://github.com/EstebanRioss/chatbotwp",
+    preview: { from: "#1e1b4b", to: "#4c1d95" },
   },
   {
     title: "Event Manager",
@@ -124,6 +129,7 @@ export const PROJECTS = [
       "Fullstack para gestión de eventos, entradas y facturas: Express + MongoDB (Mongoose) con APIs REST, JWT y bcrypt, backend de emails con Nodemailer, y frontend Angular 19 con SSR, RxJS y panel de métricas.",
     tech: ["Express", "MongoDB", "Angular 19", "JWT", "RxJS", "SSR"],
     repo: "https://github.com/EstebanRioss/proyfrontendgrupo08",
+    preview: { from: "#022c22", to: "#0f766e" },
   },
   {
     title: "JFit",
@@ -133,6 +139,7 @@ export const PROJECTS = [
       "App de fitness con autenticación y panel administrativo sobre Supabase. Gestión de usuarios, ejercicios y estadísticas con componentes reutilizables, pensada para despliegue serverless.",
     tech: ["React", "Vite", "Supabase", "TailwindCSS", "Admin Panel"],
     repo: "https://github.com/EstebanRioss/fitness",
+    preview: { from: "#1c1917", to: "#ea580c" },
   },
   {
     title: "Gestión de Reservas",
@@ -142,6 +149,7 @@ export const PROJECTS = [
       "Sistema de reservas en Java con arquitectura en capas y patrón DAO. Persistencia con JPA + Hibernate, validación de conflictos de horarios y tests unitarios con JUnit.",
     tech: ["Java", "JPA", "Hibernate", "MySQL", "DAO Pattern", "JUnit"],
     repo: "https://github.com/EstebanRioss/Trabajo_Final",
+    preview: { from: "#0c0a09", to: "#334155" },
   },
   {
     title: "Gastify",
@@ -162,6 +170,7 @@ export const PROJECTS = [
       "Zod",
     ],
     repo: "https://github.com/EstebanRioss/appgastos",
+    preview: { from: "#052e16", to: "#16a34a" },
   },
   {
     title: "Bot de Asistencia para Agencia",
@@ -181,6 +190,7 @@ export const PROJECTS = [
       "Scheduler",
     ],
     repo: "https://github.com/EstebanRioss/AgenteIA-base-",
+    preview: { from: "#1e1b4b", to: "#6d28d9" },
   },
 ];
 

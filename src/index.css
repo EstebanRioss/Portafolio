@@ -114,30 +114,6 @@ body {
   transition: transform 0.3s ease;
 }
 
-/* ---------- Page intro / preloader (anime.js timeline) ---------- */
-
-.intro-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  background: #0a0a0d;
-  background-image: radial-gradient(
-      circle at 50% 120%,
-      rgba(220, 38, 38, 0.2),
-      transparent 60%
-    ),
-    radial-gradient(circle at 50% -20%, rgba(220, 38, 38, 0.12), transparent 55%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: auto, auto, 72px 72px, 72px 72px;
-  color: #fafafa;
-  font-family: var(--font-sans);
-  will-change: transform;
-  overflow: hidden;
-}
-
 /* ---------- Ambient background blobs (transform only, GPU) ---------- */
 
 .blob {

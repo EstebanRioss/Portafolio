@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Layers, Code2, Database, Rocket, GraduationCap } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import BuildIn from "./BuildIn";
 import { ABOUT_CARDS } from "../data/content";
 import { useRevealChildren, useTilt } from "../lib/useAnime";
 
@@ -42,7 +43,7 @@ export default function About() {
 
   return (
     <section id="about" className="py-24 md:py-32 px-6 md:px-8 text-white">
-      <div className="max-w-6xl mx-auto">
+      <BuildIn className="max-w-6xl mx-auto">
         <SectionHeading
           kicker="01 · Quién soy"
           title="Sobre mí"
@@ -109,7 +110,7 @@ export default function About() {
             ))}
           </div>
         </div>
-      </div>
+      </BuildIn>
     </section>
   );
 }

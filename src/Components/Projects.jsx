@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Github } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import BuildIn from "./BuildIn";
 import { PROJECTS, PROJECT_CATEGORIES } from "../data/content";
 import { useRevealChildren, useTilt } from "../lib/useAnime";
 
@@ -81,7 +82,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-24 md:py-32 px-6 md:px-8 text-white">
-      <div className="max-w-6xl mx-auto">
+      <BuildIn className="max-w-6xl mx-auto">
         <SectionHeading
           kicker="02 · Trabajo"
           title="Proyectos"
@@ -117,7 +118,7 @@ export default function Projects() {
             <ProjectCard key={project.title} project={project} index={index} />
           ))}
         </div>
-      </div>
+      </BuildIn>
     </section>
   );
 }
